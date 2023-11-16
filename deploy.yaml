@@ -1,0 +1,20 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: trillian-database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trillian-database
+  template:
+    metadata:
+      labels:
+        app: trillian-database
+    spec:
+      containers:
+        - name: trillian-database
+          image: trillian-database:latest
+          env:
+            - name: MYSQL_USER
+              value: "zaphod"
