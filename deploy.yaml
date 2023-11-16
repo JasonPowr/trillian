@@ -16,5 +16,11 @@ spec:
         - name: trillian-database
           image: trillian-database:latest
           env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "zaphod"
+            - name: MYSQL_DATABASE
+              value: "test"
             - name: MYSQL_USER
+              value: "test"
+            - name: MYSQL_PASSWORD
               value: "zaphod"
