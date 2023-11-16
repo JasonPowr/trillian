@@ -1,38 +1,32 @@
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
   annotations:
-    build.appstudio.openshift.io/repo: https://github.com/securesign/trillian?rev={{revision}}
+    build.appstudio.openshift.io/repo: https://github.com/JasonPowr/trillian?rev={{revision}}
     build.appstudio.redhat.com/commit_sha: '{{revision}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/max-keep-runs: "3"
-    pipelinesascode.tekton.dev/on-event: '[push]'
-    pipelinesascode.tekton.dev/on-target-branch: '[redhat-v1.5.2]'
+    pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
+      == "redhat-v1.5.2"
   creationTimestamp: null
   labels:
-    appstudio.openshift.io/application: rhtas-stack-1-0-beta
+    appstudio.openshift.io/application: trillian
     appstudio.openshift.io/component: trillian-database
     pipelines.appstudio.openshift.io/type: build
   name: trillian-database-on-push
-  namespace: rhtas-tenant
+  namespace: japower-tenant
 spec:
   params:
   - name: dockerfile
-    value: Dockerfile.database
+    value: https://raw.githubusercontent.com/devfile-samples/devfile-sample-go-basic/main/docker/Dockerfile
   - name: git-url
     value: '{{repo_url}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/rhtas-tenant/rhtas-stack-1-0-beta/trillian-database:{{revision}}
+    value: quay.io/redhat-user-workloads/japower-tenant/trillian/trillian-database:{{revision}}
   - name: path-context
-    value: .
+    value: Dockerfile.database
   - name: revision
     value: '{{revision}}'
-  - name: hermetic
-    value: "true"
-  - name: prefetch-input
-    value: '{"path": ".","type": "gomod"}'
-  - name: build-source-image
-    value: "true"
   pipelineSpec:
     finally:
     - name: show-sbom
@@ -117,7 +111,7 @@ spec:
         1h, 2d, 3w for hours, days, and weeks, respectively.
       name: image-expires-after
     - default: "false"
-      description: Build a source image
+      description: Build a source image.
       name: build-source-image
       type: string
     results:
@@ -274,35 +268,12 @@ spec:
       workspaces:
       - name: workspace
         workspace: workspace
-    - name: inspect-image
-      params:
-      - name: IMAGE_URL
-        value: $(tasks.build-container.results.IMAGE_URL)
-      - name: IMAGE_DIGEST
-        value: $(tasks.build-container.results.IMAGE_DIGEST)
-      runAfter:
-      - build-container
-      taskRef:
-        params:
-        - name: name
-          value: inspect-image
-        - name: bundle
-          value: quay.io/redhat-appstudio-tekton-catalog/task-inspect-image:0.1@sha256:3a5d3f611240eb5b7b12799c2be22a71803df80dbc12cce2e1e2a252ab543423
-        - name: kind
-          value: task
-        resolver: bundles
-      when:
-      - input: $(params.skip-checks)
-        operator: in
-        values:
-        - "false"
-      workspaces:
-      - name: source
-        workspace: workspace
     - name: deprecated-base-image-check
       params:
       - name: BASE_IMAGES_DIGESTS
         value: $(tasks.build-container.results.BASE_IMAGES_DIGESTS)
+      runAfter:
+      - build-container
       taskRef:
         params:
         - name: name
@@ -407,6 +378,7 @@ spec:
     - name: workspace
     - name: git-auth
       optional: true
+  taskRunTemplate: {}
   workspaces:
   - name: workspace
     volumeClaimTemplate:
