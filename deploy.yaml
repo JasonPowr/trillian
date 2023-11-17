@@ -28,3 +28,7 @@ spec:
               value: test
             - name: MYSQL_PASSWORD
               value: zaphod
+          resources:
+            requests:
+              memory: "10Mi"
+              cpu: "10m"
