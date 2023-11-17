@@ -24,6 +24,13 @@ components:
         uri: Dockerfile.database
         buildContext: .
         rootRequired: false
+  - name: trillian-logserver
+    image:
+      imageName: trillian-logserver:latest
+      dockerfile:
+        uri: Dockerfile.logserver
+        buildContext: .
+        rootRequired: false
   - name: kubernetes-deploy
     attributes:
       deployment/replicas: 1
@@ -40,6 +47,9 @@ commands:
   - id: database-build-image
     apply:
       component: trillian-database
+  - id: logserver-build-image
+    apply:
+      component: trillian-logserver
   - id: deployk8s
     apply:
       component: kubernetes-deploy
@@ -47,6 +57,7 @@ commands:
     composite:
       commands:
         - database-build-image
+        - logserver-build-image
         - deployk8s
       group:
         kind: deploy
