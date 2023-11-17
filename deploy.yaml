@@ -33,14 +33,15 @@ spec:
               memory: "10Mi"
               cpu: "10m"
 ---
-apiVersion: v1
 kind: Service
+apiVersion: v1
 metadata:
-  name: mysql-service
+  name: mysql
 spec:
+  ports:
+    - name: mysql
+      port: 3306
+      protocol: TCP
+      targetPort: 3306
   selector:
     app: trillian-database
-  ports:
-    - protocol: TCP
-      port: 3306
-      targetPort: 3306
