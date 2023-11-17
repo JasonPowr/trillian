@@ -11,20 +11,42 @@ metadata:
   version: 1.1.0
   provider: Red Hat
   supportUrl: https://github.com/devfile-samples/devfile-support#support-information
+  attributes:
+    alpha.dockerimage-port: 3306
 parent:
   id: go
   registryUrl: 'https://registry.devfile.io'
 components:
+  - name: trillian-database
+    image:
+      imageName: trillian-database:latest
+      dockerfile:
+        uri: Dockerfile.database
+        buildContext: .
+        rootRequired: false
   - name: kubernetes-deploy
+    attributes:
+      deployment/replicas: 1
+      deployment/cpuRequest: 10m
+      deployment/memoryRequest: 10Mi
+      deployment/container-port: 3306
     kubernetes:
       uri: deploy.yaml
+      endpoints:
+      - name: mysql
+        targetPort: 3306
+        path: /
 commands:
+  - id: database-build-image
+    apply:
+      component: trillian-database
   - id: deployk8s
     apply:
       component: kubernetes-deploy
   - id: deploy
     composite:
       commands:
+        - database-build-image
         - deployk8s
       group:
         kind: deploy
