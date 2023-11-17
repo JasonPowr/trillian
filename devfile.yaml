@@ -17,13 +17,23 @@ parent:
   id: go
   registryUrl: 'https://registry.devfile.io'
 components:
-  - name: image-build
+
+  - name: trillian-database
     image:
       imageName: trillian-database:latest
       dockerfile:
         uri: Dockerfile.database
         buildContext: .
         rootRequired: false
+
+  - name: trillian-logserver
+    image:
+      imageName: trillian-logserver:latest
+      dockerfile:
+        uri: Dockerfile.logserver
+        buildContext: .
+        rootRequired: false
+
   - name: kubernetes-deploy
     attributes:
       deployment/replicas: 1
@@ -36,17 +46,25 @@ components:
       - name: mysql
         targetPort: 3306
         path: /
+
 commands:
-  - id: build-image
+  - id: database-build-image
     apply:
-      component: image-build
+      component: trillian-database
+
+  - id: logserver-build-image
+    apply:
+      component: trillian-logserver
+
   - id: deployk8s
     apply:
       component: kubernetes-deploy
+
   - id: deploy
     composite:
       commands:
-        - build-image
+        - database-build-image
+        - logserver-build-image
         - deployk8s
       group:
         kind: deploy
