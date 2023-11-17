@@ -24,6 +24,27 @@ components:
         uri: Dockerfile.database
         buildContext: .
         rootRequired: false
+  - name: image-build
+    image:
+      imageName: trillian-logserver:latest
+      dockerfile:
+        uri: Dockerfile.logserver
+        buildContext: .
+        rootRequired: false
+  - name: image-build
+    image:
+      imageName: trillian-logsigner:latest
+      dockerfile:
+        uri: Dockerfile.logsigner
+        buildContext: .
+        rootRequired: false
+  - name: image-build
+    image:
+      imageName: trillian-netcat:latest
+      dockerfile:
+        uri: Dockerfile.netcat
+        buildContext: .
+        rootRequired: false
   - name: kubernetes-deploy
     attributes:
       deployment/replicas: 1
