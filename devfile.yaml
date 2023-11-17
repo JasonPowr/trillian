@@ -17,32 +17,11 @@ parent:
   id: go
   registryUrl: 'https://registry.devfile.io'
 components:
-  - name: database-image-build
+  - name: image-build
     image:
       imageName: trillian-database:latest
       dockerfile:
         uri: Dockerfile.database
-        buildContext: .
-        rootRequired: false
-  - name: logserver-image-build
-    image:
-      imageName: trillian-logserver:latest
-      dockerfile:
-        uri: Dockerfile.logserver
-        buildContext: .
-        rootRequired: false
-  - name: logsigner-image-build
-    image:
-      imageName: trillian-logsigner:latest
-      dockerfile:
-        uri: Dockerfile.logsigner
-        buildContext: .
-        rootRequired: false
-  - name: netcat-image-build
-    image:
-      imageName: trillian-netcat:latest
-      dockerfile:
-        uri: Dockerfile.netcat
         buildContext: .
         rootRequired: false
   - name: kubernetes-deploy
@@ -58,29 +37,17 @@ components:
         targetPort: 3306
         path: /
 commands:
-  - id: build-database-image
+  - id: build-image
     apply:
-      component: database-image-build
-  - id: build-logserver-image
-    apply:
-      component: logserver-image-build
-  - id: build-logsigner-image
-    apply:
-      component: logsigner-image-build
-  - id: build-netcat-image
-    apply:
-      component: netcat-image-build
-  - id: deploy-k8s
+      component: image-build
+  - id: deployk8s
     apply:
       component: kubernetes-deploy
-  - id: build-and-deploy
+  - id: deploy
     composite:
       commands:
-        - build-database-image
-        - build-logserver-image
-        - build-logsigner-image
-        - build-netcat-image
-        - deploy-k8s
+        - build-image
+        - deployk8s
       group:
         kind: deploy
         isDefault: true

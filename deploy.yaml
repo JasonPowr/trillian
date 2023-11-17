@@ -32,21 +32,3 @@ spec:
             requests:
               memory: "10Mi"
               cpu: "10m"
-        - name: trillian-logserver
-          image: trillian-logserver:latest
-          resources:
-            requests:
-              memory: "10Mi"
-              cpu: "10m"
-        - name: trillian-signer
-          image: trillian-signer:latest
-          resources:
-            requests:
-              memory: "10Mi"
-              cpu: "10m"
-        - name: trillian-netcat
-          image: trillian-netcat:latest
-          resources:
-            requests:
-              memory: "10Mi"
-              cpu: "10m"
