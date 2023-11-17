@@ -58,26 +58,29 @@ components:
         targetPort: 3306
         path: /
 commands:
-  - id: build-image
+  - id: build-database-image
     apply:
       component: database-image-build
-  - id: build-image
+  - id: build-logserver-image
     apply:
       component: logserver-image-build
-  - id: build-image
+  - id: build-logsigner-image
     apply:
       component: logsigner-image-build
-  - id: build-image
+  - id: build-netcat-image
     apply:
       component: netcat-image-build
-  - id: deployk8s
+  - id: deploy-k8s
     apply:
       component: kubernetes-deploy
-  - id: deploy
+  - id: build-and-deploy
     composite:
       commands:
-        - build-image
-        - deployk8s
+        - build-database-image
+        - build-logserver-image
+        - build-logsigner-image
+        - build-netcat-image
+        - deploy-k8s
       group:
         kind: deploy
         isDefault: true
