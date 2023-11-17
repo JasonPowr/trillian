@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trillian-database
+spec:
+  selector:
+    matchLabels:
+      app: trillian-database
+  template:
+    spec:
+      containers:
+      - name: trillian-database
+        env:
+        - name: "MY_VAR"
+          value: "my_var"
+        - name: "NEW_VAR1"
+          value: "value1"
+        - name: "NEW_VAR2"
+          value: "value2"
