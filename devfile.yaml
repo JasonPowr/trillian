@@ -26,6 +26,7 @@ components:
         rootRequired: false
   - name: kubernetes-deploy
     attributes:
+      deployment/replicas: 1
       deployment/container-port: 3306
     kubernetes:
       uri: deploy.yaml
