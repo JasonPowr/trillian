@@ -5,15 +5,17 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: trillian-database
+      app.kubernetes.io/instance: trillian-database
   template:
     spec:
       containers:
       - name: trillian-database
         env:
-        - name: "MY_VAR"
-          value: "my_var"
-        - name: "NEW_VAR1"
-          value: "value1"
-        - name: "NEW_VAR2"
-          value: "value2"
+        - name: "MYSQL_ROOT_PASSWORD"
+          value: "zaphod"
+        - name: "MYSQL_DATABASE"
+          value: "test"
+        - name: "MYSQL_USER"
+          value: "test"
+        - name: "MYSQL_PASSWORD"
+          value: "zaphod"
