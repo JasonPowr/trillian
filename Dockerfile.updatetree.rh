@@ -23,7 +23,7 @@ RUN go mod download && \
 
 
 # Multi-Stage production build
-FROM registry.access.redhat.com/ubi9/ubi-minimal@sha256:e014f6a342c3790a07b771209b35713e3e4095ff631e4d8bb84966fab3d099e6 AS deploy
+FROM registry.access.redhat.com/ubi9/ubi-minimal@sha256:98d90ac833df94ce6c07c7908ff29cfa3398a71b629e22d7af2d0df050ca7757 AS deploy
 
 # Retrieve the binary from the previous stage
 COPY --from=build-env /opt/app-root/src/updatetree /
