@@ -1,6 +1,8 @@
 module github.com/google/trillian
 
-go 1.22.7
+go 1.23.0
+
+toolchain go1.23.7
 
 require (
 	bitbucket.org/creachadair/shell v0.0.8
@@ -30,7 +32,7 @@ require (
 	go.etcd.io/etcd/v3 v3.5.17
 	go.opencensus.io v0.24.0
 	golang.org/x/crypto v0.32.0
-	golang.org/x/sync v0.10.0
+	golang.org/x/sync v0.12.0
 	golang.org/x/sys v0.29.0
 	golang.org/x/tools v0.29.0
 	google.golang.org/api v0.214.0
