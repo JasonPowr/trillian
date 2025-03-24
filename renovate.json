@@ -1,15 +1,24 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": [
-      "github>konflux-ci/mintmaker//config/renovate/renovate.json"
-    ],
-    "packageRules": [
-      {
-        "matchManagers": [
-            "gomod"
-          ],        
-        "groupName": "go dependencies"
-      }
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>konflux-ci/mintmaker//config/renovate/renovate.json"
+  ],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "matchManagers": [
+          "gomod"
+        ],        
+      "groupName": "go dependencies"
+    }
+  ],
+  "gomod": {
+    "schedule": [
+      ""
     ]
+  },
+  "separateMajorMinor": false
 }
   
