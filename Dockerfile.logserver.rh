@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/go-toolset@sha256:4589c7d8a49990cd846cda580bd0cc11c72cc6121fe8b3f01f94c7c6a28f8a56 AS builder
+FROM registry.access.redhat.com/ubi9/go-toolset@sha256:293b288e45f61a867eba7cbd190ac9476c0ad85e7ff339cd3ad62832139f0663 AS builder
 ENV APP_ROOT=/opt/app-root
 ENV GOPATH=$APP_ROOT
 ENV CGO_ENABLED=false
@@ -15,7 +15,7 @@ ADD ./ $APP_ROOT/src/
 RUN go build -v ./cmd/trillian_log_server
 
 # Multi-Stage production build
-FROM registry.access.redhat.com/ubi9/ubi-minimal@sha256:fb77e447ab97f3fecd15d2fa5361a99fe2f34b41422e8ebb3612eecd33922fa0 AS deploy
+FROM registry.access.redhat.com/ubi9/ubi-minimal@sha256:4c8830d349732ed8066544e1cbcf878ad64f39aa4364f13cf4a69954b0ccbda5 AS deploy
 
 # Retrieve the binary from the previous stage
 COPY --from=builder /opt/app-root/src/trillian_log_server /
